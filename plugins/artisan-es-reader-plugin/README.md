@@ -1,58 +1,83 @@
-# es-mcp Plugin
+# Elasticsearch MCP Server
 
 Query Elasticsearch logs directly from Claude Cowork — with or without an SSH tunnel.
 
-## What this plugin does
+---
 
-- Search logs across any Elasticsearch index
-- Fetch recent errors filtered by level and time window
-- List available indices
-- Inspect field mappings
-- Run aggregations (count by field, time histograms, etc.)
+## Installation
 
-## Setup (required before first use)
+### 1. Install the plugin
 
-This plugin connects to Elasticsearch via the `elasticsearch-logs` MCP server.
-Each team member must configure their own credentials and connection details.
+Get **es-mcp** from the Cowork plugin marketplace and install it.
 
-### 1. Install `uv`
+### 2. Install `uv`
 
-```bash
-# macOS / Linux
-curl -LsSf https://astral.sh/uv/install.sh | sh
+The MCP server runs via `uvx`, which requires `uv` to be installed on your machine:
 
+```powershell
 # Windows
 powershell -ExecutionPolicy Bypass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-### 2. Configure connection details
+```bash
+# macOS / Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
-After installing the plugin, open its MCP settings and fill in the env vars:
+### 3. Configure the MCP server
 
-| Variable | Required | Description |
-|---|---|---|
-| `ES_HOST` | Yes (direct) | Elasticsearch hostname |
-| `ES_PORT` | Yes (direct) | Elasticsearch port (default 9200) |
-| `ES_USERNAME` | If auth enabled | Basic auth username |
-| `ES_PASSWORD` | If auth enabled | Basic auth password |
-| `ES_USE_SSL` | No | `true` for HTTPS |
-| `ES_VERIFY_CERTS` | No | `false` for self-signed certs |
-| `SSH_HOST` | SSH only | Bastion/jump host address |
-| `SSH_PORT` | SSH only | SSH port (default 22) |
-| `SSH_USERNAME` | SSH only | SSH login username |
-| `SSH_PEM_FILE` | SSH only | **Your** local path to the PEM key |
-| `SSH_REMOTE_ES_HOST` | SSH only | ES host as seen from the SSH server |
-| `SSH_REMOTE_ES_PORT` | SSH only | ES port on the remote side |
-| `SSH_LOCAL_PORT` | No | Local tunnel port (0 = auto) |
+Open `claude_desktop_config.json`:
 
-Leave `SSH_HOST` empty to use a direct connection instead of a tunnel.
+```
+Windows:  %APPDATA%\Claude\claude_desktop_config.json
+macOS:    ~/Library/Application Support/Claude/claude_desktop_config.json
+```
 
-## Usage
+Add the entry inside `"mcpServers": { }`:
 
-Just ask Claude naturally:
+```json
+{
+  "mcpServers": {
+    "elasticsearch-logs": {
+      "command": "uvx",
+      "args": ["artisan-es-reader-plugin@latest", "artisan-es-reader-plugin"],
+      "env": {
+        "ES_HOST": "localhost",
+        "ES_PORT": "9200",
+        "ES_USERNAME": "your-es-username",
+        "ES_PASSWORD": "your-es-password",
+        "ES_USE_SSL": "true",
+        "ES_VERIFY_CERTS": "false",
+        "SSH_HOST": "your-bastion-ip",
+        "SSH_PORT": "22",
+        "SSH_USERNAME": "ubuntu",
+        "SSH_PEM_FILE": "C:\\Users\\your-name\\path\\to\\key.pem",
+        "SSH_REMOTE_ES_HOST": "localhost",
+        "SSH_REMOTE_ES_PORT": "9200",
+        "SSH_LOCAL_PORT": "0"
+      }
+    }
+  }
+}
+```
 
-- "Show me recent errors in the app-logs index"
-- "Search logs for connection refused in the last 30 minutes"
-- "What indices are available?"
-- "Count errors by service in logs-2024-*"
-- "Is the Elasticsearch connection working?"
+Each team member only needs to fill in these personal values:
+
+| Variable | Description |
+|---|---|
+| `ES_USERNAME` | Elasticsearch username |
+| `ES_PASSWORD` | Elasticsearch password |
+| `SSH_HOST` | Bastion / jump host IP or hostname |
+| `SSH_PEM_FILE` | Absolute path to your local PEM key file |
+
+> **Windows paths** must use double backslashes in JSON: `C:\\Users\\your-name\\key.pem`
+
+### 4. Restart Cowork
+
+The SSH tunnel starts automatically on first tool use.
+
+---
+
+## Notes
+
+- `ES_HOST` is only used for direct connect
