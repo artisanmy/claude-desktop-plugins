@@ -1,6 +1,6 @@
 {
   "name": "artisan-es-reader-plugin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Query Elasticsearch logs from Claude — supports direct connection and SSH tunnel via PEM file",
   "author": {
     "name": "Artisan"
