@@ -22,6 +22,34 @@ jobs:
           echo "plugin_id=$PLUGIN_ID" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Verify tag version matches manifests
+        run: |
+          set -euo pipefail
+          PLUGIN_ID="${{ steps.parse.outputs.plugin_id }}"
+          TAG_VERSION="${{ steps.parse.outputs.version }}"
+
+          MANIFEST="plugins/$PLUGIN_ID/.claude-plugin/plugin.json"
+          if [ ! -f "$MANIFEST" ]; then
+            echo "::error::Missing $MANIFEST"
+            exit 1
+          fi
+          MANIFEST_VERSION="$(jq -r '.version' "$MANIFEST")"
+          if [ "$MANIFEST_VERSION" != "$TAG_VERSION" ]; then
+            echo "::error::Tag version ($TAG_VERSION) != $MANIFEST version ($MANIFEST_VERSION). Bump $MANIFEST before tagging."
+            exit 1
+          fi
+
+          MARKET=".claude-plugin/marketplace.json"
+          if [ -f "$MARKET" ]; then
+            MARKET_VERSION="$(jq -r --arg id "$PLUGIN_ID" '.plugins[] | select(.name == $id) | .version' "$MARKET")"
+            if [ -n "$MARKET_VERSION" ] && [ "$MARKET_VERSION" != "null" ] && [ "$MARKET_VERSION" != "$TAG_VERSION" ]; then
+              echo "::error::Tag version ($TAG_VERSION) != marketplace.json version ($MARKET_VERSION). Bump $MARKET before tagging."
+              exit 1
+            fi
+          fi
+
+          echo "Version check passed: $TAG_VERSION matches manifests."
+
       - name: Build .plugin file
         run: bash scripts/build-plugin.sh "${{ steps.parse.outputs.plugin_id }}"
 
