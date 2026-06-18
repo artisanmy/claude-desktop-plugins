@@ -1,0 +1,33 @@
+name: Build & Release Plugin
+
+on:
+  push:
+    tags:
+      - "*/v*"   # e.g. example-plugin/v1.0.0
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parse plugin id from tag
+        id: parse
+        run: |
+          TAG="${{ github.ref_name }}"
+          PLUGIN_ID="${TAG%/v*}"
+          VERSION="${TAG#*/v}"
+          echo "plugin_id=$PLUGIN_ID" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build .plugin file
+        run: bash scripts/build-plugin.sh "${{ steps.parse.outputs.plugin_id }}"
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "${{ steps.parse.outputs.plugin_id }} v${{ steps.parse.outputs.version }}"
+          files: releases/${{ steps.parse.outputs.plugin_id }}.plugin

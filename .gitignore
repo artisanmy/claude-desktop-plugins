@@ -1,0 +1,5 @@
+# Locally built plugin files (CI builds these via release.yml)
+# Remove the lines below if you prefer to commit .plugin files directly
+# releases/
+.DS_Store
+node_modules/

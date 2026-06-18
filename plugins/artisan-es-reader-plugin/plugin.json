@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schema/plugin-manifest.schema.json",
+  "id": "artisan-es-reader-plugin",
+  "name": "Artisan ES Reader",
+  "version": "0.1.0",
+  "description": "Query Elasticsearch logs from Claude — supports direct connection and SSH tunnel via PEM file.",
+  "author": "Artisan",
+  "category": "developer",
+  "tags": ["elasticsearch", "logs", "ssh", "devops"],
+  "skills": [
+    {
+      "name": "query-elasticsearch",
+      "description": "Search logs, fetch recent errors, list indices, inspect mappings, and run aggregations against Elasticsearch.",
+      "path": "skills/query-elasticsearch"
+    },
+    {
+      "name": "cowork-plugin-customizer",
+      "description": "Customize a Claude Code plugin for a specific organisation's tools and workflows.",
+      "path": "skills/cowork-plugin-customizer"
+    },
+    {
+      "name": "create-cowork-plugin",
+      "description": "Guide users through creating a new plugin from scratch in a Cowork session.",
+      "path": "skills/create-cowork-plugin"
+    }
+  ]
+}
