@@ -1,0 +1,21 @@
+{
+  "name": "artisan-plugins",
+  "owner": {
+    "name": "Artisan",
+    "email": "soohao@artisan.com.my"
+  },
+  "description": "Internal plugin marketplace for the Artisan team.",
+  "plugins": [
+    {
+      "name": "artisan-es-reader-plugin",
+      "source": "./plugins/artisan-es-reader-plugin",
+      "description": "Query Elasticsearch logs from Claude — supports direct connection and SSH tunnel via PEM file.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Artisan"
+      },
+      "keywords": ["elasticsearch", "logs", "ssh", "devops"],
+      "category": "developer"
+    }
+  ]
+}
