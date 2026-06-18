@@ -12,18 +12,8 @@
       "category": "developer",
       "tags": ["elasticsearch", "logs", "ssh", "devops"],
       "path": "plugins/artisan-es-reader-plugin",
-      "releaseUrl": "https://github.com/artisanmy/claude-desktop-plugins/releases/download/artisan-es-reader-plugin-v0.2.0/artisan-es-reader-plugin.plugin",
+      "releaseUrl": "https://github.com/artisanmy/claude-desktop-plugins/releases/download/artisan-es-reader-plugin%2Fv0.2.0/artisan-es-reader-plugin.plugin",
       "changelog": "Improved setup documentation and installation guide."
-    },
-    {
-      "id": "example-plugin",
-      "name": "Example Plugin",
-      "description": "A template plugin to demonstrate the plugin structure.",
-      "version": "1.0.0",
-      "author": "Artisan",
-      "category": "utilities",
-      "tags": ["example", "template"],
-      "minClaudeVersion": "1.0.0",
-      "path": "plugins/example-plugin",
-      "releaseUrl": "https://github.com/artisanmy/claude-desktop-plugins/releases/download/example-plugin-v1.0.0/example-plugin.plugin",
-      "changel
+    }
+  ]
+}
