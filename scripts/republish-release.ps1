@@ -52,8 +52,8 @@ if ($LASTEXITCODE -ne 0) { throw "Pushing tag $Tag failed." }
 
 # 5. If the GitHub CLI is available, clear any stale release so the asset rebuilds clean.
 if (Get-Command gh -ErrorAction SilentlyContinue) {
-  gh release delete $Tag --yes --cleanup-tag 2>$null
-  git push origin $Tag 2>$null   # re-push in case --cleanup-tag removed it
+  try { gh release delete $Tag --yes --cleanup-tag 2>$null } catch {}
+  try { git push origin $Tag 2>$null } catch {}  # re-push in case --cleanup-tag removed it
 }
 
 Write-Host ""
