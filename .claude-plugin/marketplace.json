@@ -10,7 +10,7 @@
       "name": "artisan-es-reader-plugin",
       "source": "./plugins/artisan-es-reader-plugin",
       "description": "Query Elasticsearch logs from Claude — supports direct connection and SSH tunnel via PEM file.",
-      "version": "0.4.3",
+      "version": "0.4.4",
       "author": {
         "name": "Artisan - Soo Hao"
       },
