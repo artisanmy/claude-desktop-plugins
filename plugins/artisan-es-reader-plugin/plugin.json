@@ -2,9 +2,9 @@
   "$schema": "../../schema/plugin-manifest.schema.json",
   "id": "artisan-es-reader-plugin",
   "name": "Artisan ES Reader",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "description": "Query Elasticsearch logs from Claude — supports direct connection and SSH tunnel via PEM file.",
-  "author": "Artisan",
+  "author": "Artisan - Soo Hao",
   "category": "developer",
   "tags": ["elasticsearch", "logs", "ssh", "devops"],
   "skills": [
