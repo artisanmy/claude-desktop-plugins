@@ -42,8 +42,8 @@ if ($LASTEXITCODE -ne 0) { throw "git push origin HEAD failed." }
 
 # 4. Recreate the tag at the current commit and re-fire the release workflow.
 Write-Host ">> Removing old tag (local + remote) if present..."
-git tag -d $Tag 2>$null; $LASTEXITCODE = 0
-git push origin ":refs/tags/$Tag" 2>$null; $LASTEXITCODE = 0
+try { git tag -d $Tag 2>$null } catch {}
+try { git push origin ":refs/tags/$Tag" 2>$null } catch {}
 
 Write-Host ">> Creating and pushing fresh tag..."
 git tag $Tag
