@@ -80,5 +80,14 @@ Edit-File "registry.json" @(
 
 Write-Host ""
 Write-Host ">> All manifests set to $Version."
-Write-Host ">> Review with:  git diff"
-Write-Host ">> Then publish: powershell -ExecutionPolicy Bypass -File scripts\republish-release.ps1 -Version $Version"
+
+# 5. Commit the manifest changes.
+git add "plugins/$PluginId/.claude-plugin/plugin.json" `
+        ".claude-plugin/marketplace.json" `
+        "plugins/$PluginId/plugin.json" `
+        "registry.json"
+git commit -m "v$Version"
+if ($LASTEXITCODE -ne 0) { Write-Host ">> Nothing new to commit (continuing)." }
+
+Write-Host ""
+Write-Host ">> Done. Now publish: powershell -ExecutionPolicy Bypass -File scripts\republish-release.ps1 -Version $Version"

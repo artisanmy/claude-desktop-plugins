@@ -3,15 +3,13 @@
   detects the new version. Run from the repo root in PowerShell, where you have
   GitHub push access.
 
-      powershell -ExecutionPolicy Bypass -File scripts\republish-release.ps1
-
-  Defaults to artisan-es-reader-plugin v0.2.0. Override with args:
-      ... -File scripts\republish-release.ps1 -PluginId artisan-es-reader-plugin -Version 0.2.1
+      powershell -ExecutionPolicy Bypass -File scripts\republish-release.ps1 -Version 0.5.0
+      powershell -ExecutionPolicy Bypass -File scripts\republish-release.ps1 -PluginId artisan-es-reader-plugin -Version 0.5.0
 #>
 
 param(
-  [string]$PluginId = "artisan-es-reader-plugin",
-  [string]$Version  = "0.2.0"
+  [string]$PluginId                           = "artisan-es-reader-plugin",
+  [Parameter(Mandatory = $true)][string]$Version
 )
 
 $ErrorActionPreference = "Stop"
@@ -44,8 +42,8 @@ if ($LASTEXITCODE -ne 0) { throw "git push origin HEAD failed." }
 
 # 4. Recreate the tag at the current commit and re-fire the release workflow.
 Write-Host ">> Removing old tag (local + remote) if present..."
-git tag -d $Tag 2>$null
-git push origin ":refs/tags/$Tag" 2>$null
+git tag -d $Tag 2>$null; $LASTEXITCODE = 0
+git push origin ":refs/tags/$Tag" 2>$null; $LASTEXITCODE = 0
 
 Write-Host ">> Creating and pushing fresh tag..."
 git tag $Tag
